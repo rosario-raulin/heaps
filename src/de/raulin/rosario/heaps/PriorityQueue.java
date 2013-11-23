@@ -9,7 +9,7 @@ package de.raulin.rosario.heaps;
  * @author Rosario Raulin
  * @param <T> the type of object being stored
  */
-public interface PriorityQueue<T extends Comparable<T>> {
+public interface PriorityQueue<T> {
 	/**
 	 *  Returns the smallest element in this priority queue without
 	 *  modifying the queue. That is, two successive calls to this

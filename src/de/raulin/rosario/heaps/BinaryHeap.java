@@ -1,6 +1,8 @@
 package de.raulin.rosario.heaps;
 
-public class BinaryHeap<T extends Comparable<T>> implements PriorityQueue<T> {
+import java.util.Comparator;
+
+public class BinaryHeap<T> implements PriorityQueue<T> {
 
 	private final static int UNKNOWN_POS = -1;
 	private static final int DEFAULT_SIZE = 16;
@@ -20,14 +22,16 @@ public class BinaryHeap<T extends Comparable<T>> implements PriorityQueue<T> {
 
 	private int size;
 	private Object[] data;
+	private Comparator<T> comp;
 
-	public BinaryHeap() {
-		this(DEFAULT_SIZE);
+	public BinaryHeap(Comparator<T> comp) {
+		this(DEFAULT_SIZE, comp);
 	}
 
-	public BinaryHeap(int size) {
+	public BinaryHeap(int size, Comparator<T> comp) {
 		this.size = 0;
 		this.data = new Object[size + 1];
+		this.comp = comp;
 	}
 
 	private void resize(int to) {
@@ -107,7 +111,7 @@ public class BinaryHeap<T extends Comparable<T>> implements PriorityQueue<T> {
 	}
 
 	private boolean more(int i, int j) {
-		return get(data, i).element.compareTo(get(data, j).element) > 0;
+		return comp.compare(get(data, i).element, get(data, j).element) > 0;
 	}
 
 	private void swim(int k) {

@@ -1,6 +1,6 @@
 package de.raulin.rosario.heaps;
 
-public abstract class PQNode<T extends Comparable<T>> {
+public abstract class PQNode<T> {
 	protected T element;
 
 	public PQNode(T element) {

@@ -1,6 +1,8 @@
 package de.raulin.rosario.heaps;
 
-public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> {
+import java.util.Comparator;
+
+public class FibonacciHeap<T> implements PriorityQueue<T> {
 
 	class FNode extends PQNode<T> {
 		private FNode parent;
@@ -44,13 +46,15 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 	private FNode root;
 	private int size;
 	private DLinkedList<FNode> roots;
+	private final Comparator<T> comp;
 
 	/**
 	 * Creates an empty Fibonacci heap.
 	 */
-	public FibonacciHeap() {
+	public FibonacciHeap(Comparator<T> comp) {
 		this.size = 0;
 		this.roots = null;
+		this.comp = comp;
 	}
 
 	/**
@@ -162,7 +166,7 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 				// A root with the same degree exists
 				FNode y = get(temp, degree);
 				// Now we have to make sure x <= y.
-				if (x.element.compareTo(y.element) > 0) {
+				if (more(x.element, y.element)) {
 					FNode tmp = x;
 					x = y;
 					y = tmp;
@@ -190,7 +194,7 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 					root = curr;
 				} else {
 					curr.node = roots.push_back(curr);
-					if (curr.element.compareTo(root.element) < 0) {
+					if (less(curr.element, root.element)) {
 						// We found a smaller element, so that's our root.
 						root = curr;
 					}
@@ -240,7 +244,7 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 			root = toInsert;
 		} else {
 			toInsert.node = roots.push_back(toInsert);
-			if (element.compareTo(root.element) < 0) {
+			if (less(element, root.element)) {
 				// We found a new minimum, so that's the root.
 				root = toInsert;
 			}
@@ -264,11 +268,11 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 	 */
 	private void decreaseKey(FNode x) {
 		FNode y = x.parent;
-		if (y != null && x.element.compareTo(y.element) < 0) {
+		if (y != null && less(x.element, y.element)) {
 			cut(x, y);
 			ccut(y);
 		}
-		if (x.element.compareTo(root.element) < 0) {
+		if (less(x.element, root.element)) {
 			root = x;
 		}
 	}
@@ -318,5 +322,13 @@ public class FibonacciHeap<T extends Comparable<T>> implements PriorityQueue<T> 
 	@Override
 	public boolean isEmpty() {
 		return size == 0;
+	}
+	
+	private boolean less(T x, T y) {
+		return comp.compare(x, y) < 0;
+	}
+	
+	private boolean more(T x, T y) {
+		return comp.compare(x, y) > 0;
 	}
 }

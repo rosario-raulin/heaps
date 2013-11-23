@@ -1,6 +1,7 @@
 package de.raulin.rosario.heaps;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -70,8 +71,17 @@ public final class HeapCompare {
 				}
 			}
 
-			PriorityQueue<Integer> fibHeap = new FibonacciHeap<Integer>();
-			PriorityQueue<Integer> binHeap = new BinaryHeap<Integer>(testSize);
+			Comparator<Integer> comp = new Comparator<Integer>() {
+
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					return o1 - o2;
+				}
+				
+			};
+			
+			PriorityQueue<Integer> fibHeap = new FibonacciHeap<Integer>(comp);
+			PriorityQueue<Integer> binHeap = new BinaryHeap<Integer>(testSize, comp);
 
 			assert (fibHeap.size() == 0);
 			assert (binHeap.size() == 0);
